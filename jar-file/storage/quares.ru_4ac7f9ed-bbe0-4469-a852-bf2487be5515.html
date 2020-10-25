@@ -1,0 +1,471 @@
+<!doctype html>
+<html lang="ru"> 
+ <head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"> 
+  <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"> 
+  <meta http-equiv="X-UA-Compatible" content="IE=Edge"> 
+  <meta name="description" content="  мы используем набор инструментов eclipse + spring для сборки java-приложения, мы можем запустить приложение в eclipse IDE, но если мы эксп."> 
+  <meta name="keywords" content="java, spring, eclipse, maven, вопросы и ответы "> 
+  <meta name="robots" content="index, follow"> 
+  <title>как исправить ошибку «java.lang.NoClassDefFoundError: org / slf4j / LoggerFactory» при запуске приложения java jar</title> 
+  <link href="https://fonts.googleapis.com/css?family=PT+Sans:400,700" rel="stylesheet"> 
+  <link rel="stylesheet" href="css/bootstrap.min.css"> 
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"> 
+  <link rel="stylesheet" href="css/animate.css"> 
+  <link rel="stylesheet" href="css/main.css"> 
+  <link rel="icon" href="https://quares.ru/favicon.ico" type="image/x-icon"> <!-- Adsense --> 
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> 
+  <script>
+     (adsbygoogle = window.adsbygoogle || []).push({
+          google_ad_client: "ca-pub-9128691668974597",
+          enable_page_level_ads: true
+     });
+</script> <!-- Adsense --> <!-- Yandex.Metrika counter --> 
+  <script type="text/javascript">
+   (function(m,e,t,r,i,k,a){m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+   m[i].l=1*new Date();k=e.createElement(t),a=e.getElementsByTagName(t)[0],k.async=1,k.src=r,a.parentNode.insertBefore(k,a)})
+   (window, document, "script", "https://mc.yandex.ru/metrika/tag.js", "ym");
+
+   ym(52207810, "init", {
+        id:52207810,
+        clickmap:true,
+        trackLinks:true,
+        accurateTrackBounce:true
+   });
+</script> 
+  <noscript>
+   &lt;div&gt;&lt;img src="https://mc.yandex.ru/watch/52207810" style="position:absolute; left:-9999px;" alt=""&gt;
+  </noscript> <!-- /Yandex.Metrika counter --> 
+ </head> 
+ <body> 
+  <header id="header" class="header"> 
+   <div class="container"> 
+    <div class="row"> 
+     <div class="col-lg-3"> <a href="/"><img src="img/logo.svg" alt="Quares" class="logo animated fadeInUp"></a> 
+     </div> 
+     <div class="col-lg-5 ml-auto"> 
+      <nav> <!-- <ul class="menu d-flex justify-content-center animated fadeInDown">
+                            <li class="menu__item">
+                                <a href="#">
+                                    Тэги
+                                </a>
+                            </li>
+                            <li class="menu__item">
+                                <a href="#">
+                                    Вопросы
+                                </a>
+                            </li>
+                            <li class="menu__item">
+                                <a href="#">
+                                    Статьи
+                                </a>
+                            </li>
+                        </ul> --> 
+      </nav> 
+     </div> 
+    </div> 
+   </div> 
+  </header> 
+  <section id="question" class="question"> 
+   <div class="container"> 
+    <div class="row"> 
+     <div class="col-lg-8"> 
+      <div class="title"> 
+       <h1 class="title__main">как исправить ошибку «java.lang.NoClassDefFoundError: org / slf4j / LoggerFactory» при запуске приложения java jar</h1> 
+       <div class="title__text"> 
+        <p> <span> мы используем набор инструментов eclipse + spring для сборки java-приложения, мы можем запустить приложение в eclipse IDE, но если мы экспортируем как jar со всеми jar-зависимостями и запустим его на машине linux.</span> <span> мы всегда получаем ошибку следующим образом:</span> </p>
+        <pre><code>Exception in thread "main" java.lang.NoClassDefFoundError: org/slf4j/LoggerFactory
+    at com.ctrip.framework.apollo.demo.api.SimpleApolloConfigDemo.&lt;clinit&gt;(SimpleApolloConfigDemo.java:22)
+Caused by: java.lang.ClassNotFoundException: org.slf4j.LoggerFactory
+    at java.net.URLClassLoader.findClass(URLClassLoader.java:381)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:424)
+    at sun.misc.Launcher$AppClassLoader.loadClass(Launcher.java:335)
+    at java.lang.ClassLoader.loadClass(ClassLoader.java:357)
+</code></pre> 
+        <p> <span> вот наш POM.xml ниже:</span> </p>
+        <pre><code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"&gt;
+    &lt;parent&gt;
+        &lt;artifactId&gt;apollo&lt;/artifactId&gt;
+        &lt;groupId&gt;com.ctrip.framework.apollo&lt;/groupId&gt;
+        &lt;version&gt;1.3.0-SNAPSHOT&lt;/version&gt;
+    &lt;/parent&gt;
+    &lt;modelVersion&gt;4.0.0&lt;/modelVersion&gt;
+    &lt;artifactId&gt;apollo-demo&lt;/artifactId&gt;
+    &lt;name&gt;Apollo Demo&lt;/name&gt;
+    &lt;packaging&gt;jar&lt;/packaging&gt;
+    &lt;properties&gt;
+        &lt;java.version&gt;1.7&lt;/java.version&gt;
+        &lt;github.path&gt;${project.artifactId}&lt;/github.path&gt;
+    &lt;/properties&gt;
+    &lt;dependencies&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;com.ctrip.framework.apollo&lt;/groupId&gt;
+            &lt;artifactId&gt;apollo-client&lt;/artifactId&gt;
+            &lt;version&gt;${project.version}&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;!-- for spring demo --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-context&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+        &lt;!-- for spring boot demo --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter&lt;/artifactId&gt;
+            &lt;exclusions&gt;
+                &lt;exclusion&gt;
+                    &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+                    &lt;artifactId&gt;spring-boot-starter-logging&lt;/artifactId&gt;
+                &lt;/exclusion&gt;
+            &lt;/exclusions&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.boot&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-boot-starter-log4j2&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+    &lt;!-- for refresh scope demo --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework.cloud&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-cloud-context&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
+            &lt;artifactId&gt;log4j-core&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
+            &lt;artifactId&gt;log4j-api&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.apache.logging.log4j&lt;/groupId&gt;
+            &lt;artifactId&gt;log4j-slf4j-impl&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+        &lt;!-- take over jcl --&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
+            &lt;artifactId&gt;jcl-over-slf4j&lt;/artifactId&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
+            &lt;artifactId&gt;slf4j-log4j12&lt;/artifactId&gt;
+            &lt;version&gt;1.7.25&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;dependency&gt;
+             &lt;groupId&gt;org.slf4j&lt;/groupId&gt;
+             &lt;artifactId&gt;slf4j-api&lt;/artifactId&gt;
+             &lt;version&gt;1.7.25&lt;/version&gt;
+        &lt;/dependency&gt;        
+    &lt;/dependencies&gt;
+&lt;/project&gt;
+</code></pre>
+        <p> <span> 2.1 мы уже включили slf4j-log4j12 и slf4j-api в качестве зависимости.</span> </p>
+        <p> <span> 2.2 приложение может нормально работать в окне Eclipse IDE.</span> </p>
+        <p> <span> 2.3 если мы экспортируем исполняемый jar, включая все зависимости, и отправим jar на машину с linux, запустим файл jar, чтобы получить вышеуказанную ошибку.</span> </p>
+        <p> <span> 2.4 мы также проверили сгенерированный пакет jar в windows с winRAR, там были пакеты slf4j и log4j * jar, см. Рисунок ниже.</span> </p>
+        <p> <a rel="nofollow" target="_blank" href="https://i.stack.imgur.com/KRyFW.png"><img src="https://i.stack.imgur.com/KRyFW.png" alt="введите описание изображения здесь"></a> </p>
+        <p> <span> мы боролись с этим в течение половины дня, но не получили никакого прогресса.</span> <span> Надеюсь, что каждый эксперт может поделиться с нами некоторыми легкими или любыми предложениями.</span> <span> очень ценится !!!</span> </p> 
+       </div> 
+      </div> 
+      <div class="tag d-flex justify-content-end"> 
+       <ul class="tag__block d-flex"> <i class="fa fa-tags feature__icon"></i> 
+        <li class="tag__text"><a href="?tag=java">java</a></li>
+        <li class="tag__text"><a href="?tag=spring">spring</a></li>
+        <li class="tag__text"><a href="?tag=eclipse">eclipse</a></li>
+        <li class="tag__text"><a href="?tag=maven">maven</a></li> 
+       </ul> 
+      </div> 
+      <div class="colanswer d-flex"> 
+       <p>Всего 2 ответа</p> 
+      </div> 
+     </div> 
+     <div class="col-lg-4">
+      <div class="adverts"> 
+       <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> <!-- quares справа --> 
+       <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9128691668974597" data-ad-slot="9689472042" data-ad-format="auto" data-full-width-responsive="true"></ins> 
+       <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script> 
+      </div>
+     </div> 
+    </div> 
+   </div> 
+  </section> 
+  <section id="answer" class="answer"> 
+   <div class="container"> 
+    <div class="row"> 
+     <div class="col-lg-8"> 
+      <div class="title"> <!-- Adsense --> 
+       <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> <!-- После вопроса --> 
+       <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9128691668974597" data-ad-slot="7626042106" data-ad-format="auto" data-full-width-responsive="true"></ins> 
+       <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script> <!-- Adsense --> 
+       <hr>
+       <div class="title__text">
+        <p> <span> Вы должны указать maven для компиляции зависимостей следующим образом: jar компилируется, но вам нужен src в youre jar, а не jar там:</span> </p>
+        <pre><code>&lt;build&gt;
+    &lt;plugins&gt;
+        &lt;plugin&gt;
+            &lt;groupId&gt;org.apache.maven.plugins&lt;/groupId&gt;
+            &lt;artifactId&gt;maven-shade-plugin&lt;/artifactId&gt;
+            &lt;version&gt;3.0.0&lt;/version&gt;
+            &lt;configuration&gt;
+            &lt;/configuration&gt;
+            &lt;executions&gt;
+                &lt;execution&gt;
+                    &lt;phase&gt;package&lt;/phase&gt;
+                    &lt;goals&gt;
+                        &lt;goal&gt;shade&lt;/goal&gt;
+                    &lt;/goals&gt;
+                &lt;/execution&gt;
+            &lt;/executions&gt;
+        &lt;/plugin&gt;
+    &lt;/plugins&gt;
+&lt;/build&gt;
+</code></pre>
+        <p> <span> и dependencys обычно имеют <code>&lt;scope&gt;compile&lt;/scope&gt;</code> , чтобы сообщить компилятору, что они необходимы во время выполнения</span> </p>
+       </div>
+       <hr>
+       <div class="title__text">
+        <p> <span> Я столкнулся с подобной проблемой несколько дней назад, правильно я добавляю библиотеки jar, но ядро ​​(скрипты / классы) файла jar не включены по какой-то причине, по которой я смог решить эту проблему, щелкнув правой кнопкой мыши на файле jar. в свойствах и установите путь к классам для этой папки JAR.</span> </p>
+        <p> <span> если вы хотите проверить, что в jar-файле нет класса Def, изучите jar-файл из проводника и дважды щелкните мышью на любом классе, вы увидите страницу, показывающую, что в этом классе нет сценария, и он попросит вас установить путь к классу.</span> </p>
+        <p> <span> Другой подход, который я попробовал, который также работал для меня, я импортировал те же файлы JAR на NetBeans, и они работали на 100%</span> </p>
+       </div> 
+      </div> 
+     </div> 
+     <div class="col-lg-4 my-auto">
+      <div class="adverts"> 
+       <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script> <!-- quares справа --> 
+       <ins class="adsbygoogle" style="display:block" data-ad-client="ca-pub-9128691668974597" data-ad-slot="9689472042" data-ad-format="auto" data-full-width-responsive="true"></ins> 
+       <script>
+                         (adsbygoogle = window.adsbygoogle || []).push({});
+                    </script> 
+      </div>
+     </div> 
+     <div class="col-lg-8">
+      <div id="cmtx_container" class="cmtx_container">
+       <script src="//quares.ru/comments/frontend/view/default/javascript/common-jq.min.js" defer></script>
+       <link rel="stylesheet" type="text/css" href="//quares.ru/comments/frontend/view/default/stylesheet/css/stylesheet.min.css">
+       <div class="cmtx_comments_section">
+        <div id="cmtx_comments_container" class="cmtx_comments_container cmtx_clear">
+         <hr>
+        </div>
+       </div>
+       <div class="cmtx_form_section">
+        <div id="cmtx_form_container" class="cmtx_form_container cmtx_clear">
+         <h3 class="cmtx_form_heading">Есть идеи?</h3>
+         <div id="cmtx_preview"></div>
+         <form id="cmtx_form" class="cmtx_form">
+          <noscript>
+           <div class="cmtx_javascript_disabled">
+            JavaScript must be enabled for certain features to work
+           </div>
+          </noscript>
+          <div class="cmtx_row cmtx_icons_row cmtx_clear cmtx_wait_for_comment" role="toolbar">
+           <div class="cmtx_col_12">
+            <div class="cmtx_container cmtx_icons_container cmtx_clear">
+             <div class="cmtx_bb_code_container">
+              <span class="cmtx_bb_code cmtx_bb_code_bold" data-cmtx-tag="[B]|[/B]" title="Bold"></span><span class="cmtx_bb_code cmtx_bb_code_italic" data-cmtx-tag="[I]|[/I]" title="Italic"></span><span class="cmtx_bb_code cmtx_bb_code_underline" data-cmtx-tag="[U]|[/U]" title="Underline"></span><span class="cmtx_bb_code cmtx_bb_code_strike" data-cmtx-tag="[STRIKE]|[/STRIKE]" title="Strike"></span><span class="cmtx_bb_code cmtx_bb_code_superscript" data-cmtx-tag="[SUPERSCRIPT]|[/SUPERSCRIPT]" title="Superscript"></span><span class="cmtx_bb_code cmtx_bb_code_subscript" data-cmtx-tag="[SUBSCRIPT]|[/SUBSCRIPT]" title="Subscript"></span><span class="cmtx_bb_code cmtx_bb_code_code" data-cmtx-tag="[CODE]|[/CODE]" title="Code"></span><span class="cmtx_bb_code cmtx_bb_code_quote" data-cmtx-tag="[QUOTE]|[/QUOTE]" title="Quote"></span><span class="cmtx_bb_code cmtx_bb_code_line" data-cmtx-tag="[LINE]" title="Line"></span><span class="cmtx_bb_code cmtx_bb_code_bullet" data-cmtx-tag="[BULLET]|[ITEM]|[/ITEM]|[/BULLET]" title="Bullet list" data-cmtx-target-modal="#cmtx_bullet_modal"></span><span class="cmtx_bb_code cmtx_bb_code_numeric" data-cmtx-tag="[NUMERIC]|[ITEM]|[/ITEM]|[/NUMERIC]" title="Numeric list" data-cmtx-target-modal="#cmtx_numeric_modal"></span><span class="cmtx_bb_code cmtx_bb_code_link" data-cmtx-tag="[LINK]|[LINK=|]|[/LINK]" title="Web link" data-cmtx-target-modal="#cmtx_link_modal"></span><span class="cmtx_bb_code cmtx_bb_code_image" data-cmtx-tag="[IMAGE]|[/IMAGE]" title="Image" data-cmtx-target-modal="#cmtx_image_modal"></span>
+             </div>
+            </div>
+           </div>
+          </div>
+          <div class="cmtx_row cmtx_comment_row cmtx_clear">
+           <div class="cmtx_col_12">
+            <div class="cmtx_container cmtx_comment_container">
+             <textarea name="cmtx_comment" id="cmtx_comment" class="cmtx_field cmtx_textarea_field cmtx_comment_field cmtx_required" placeholder="Введите ваш ответ .." title="Enter your comment here" maxlength="10000"></textarea>
+            </div>
+           </div>
+          </div>
+          <div class="cmtx_row cmtx_counter_row cmtx_clear cmtx_wait_for_comment">
+           <div class="cmtx_col_12">
+            <div class="cmtx_container cmtx_counter_container">
+             <span id="cmtx_counter" class="cmtx_counter">10000</span>
+            </div>
+           </div>
+          </div>
+          <div class="cmtx_row cmtx_user_row cmtx_clear ">
+           <div class="cmtx_col_12">
+            <div class="cmtx_container cmtx_name_container">
+             <input type="text" name="cmtx_name" id="cmtx_name" class="cmtx_field cmtx_text_field cmtx_name_field cmtx_required" value="Anonymous" placeholder="Имя" title="Enter your name here" maxlength="30">
+            </div>
+           </div>
+          </div>
+          <div class="cmtx_checkbox_container cmtx_wait_for_user">
+           <div class="cmtx_row cmtx_cookie_row cmtx_clear">
+            <div class="cmtx_col_12">
+             <div class="cmtx_container cmtx_cookie_container">
+              <input type="checkbox" id="cmtx_cookie" name="cmtx_cookie" value="1" checked> <label for="cmtx_cookie">Remember my form inputs<span class="cmtx_checkbox_extra"> on this computer</span></label>
+             </div>
+            </div>
+           </div>
+          </div>
+          <div class="cmtx_row cmtx_button_row cmtx_clear">
+           <div class="cmtx_col_2">
+            <div class="cmtx_container cmtx_submit_button_container">
+             <input type="button" id="cmtx_submit_button" class="cmtx_button cmtx_button_primary " data-cmtx-type="submit" value="Добавить" title="Добавить">
+            </div>
+           </div>
+           <div class="cmtx_col_2">
+            <div class="cmtx_container cmtx_preview_button_container">
+             <input type="button" id="cmtx_preview_button" class="cmtx_button cmtx_button_secondary " data-cmtx-type="preview" value="Просмотр" title="Просмотр">
+            </div>
+           </div>
+           <div class="cmtx_col_8"></div>
+          </div>
+          <input type="hidden" name="cmtx_reply_to" value="">
+          <input type="hidden" id="cmtx_hidden_data" value="">
+          <input type="hidden" name="cmtx_subscribe" value="">
+          <input type="hidden" name="cmtx_time" value="1603621458">
+          <input type="text" name="cmtx_honeypot" class="cmtx_honeypot" value="" autocomplete="off">
+         </form>
+         <div id="cmtx_bullet_modal" class="cmtx_modal_box" role="dialog">
+          <header>
+           <a href="#" class="cmtx_modal_close">x</a>
+           <div>
+            Insert Bullet List
+           </div>
+          </header>
+          <div class="cmtx_modal_body">
+           <div>
+            Please enter at least one item.
+           </div>
+           <div>
+            <span>Item:</span> 
+            <input type="text">
+           </div>
+           <div>
+            <span>Item:</span> 
+            <input type="text">
+           </div>
+           <div>
+            <span>Item:</span> 
+            <input type="text">
+           </div>
+           <div>
+            <span>Item:</span> 
+            <input type="text">
+           </div>
+           <div>
+            <span>Item:</span> 
+            <input type="text">
+           </div>
+          </div>
+          <footer>
+           <input type="button" id="cmtx_bullet_modal_insert" class="cmtx_button cmtx_button_primary" value="Insert">
+           <input type="button" class="cmtx_button cmtx_button_secondary" value="Cancel">
+          </footer>
+         </div>
+         <div id="cmtx_numeric_modal" class="cmtx_modal_box" role="dialog">
+          <header>
+           <a href="#" class="cmtx_modal_close">x</a>
+           <div>
+            Insert Numeric List
+           </div>
+          </header>
+          <div class="cmtx_modal_body">
+           <div>
+            Please enter at least one item.
+           </div>
+           <div>
+            <span>Item:</span> 
+            <input type="text">
+           </div>
+           <div>
+            <span>Item:</span> 
+            <input type="text">
+           </div>
+           <div>
+            <span>Item:</span> 
+            <input type="text">
+           </div>
+           <div>
+            <span>Item:</span> 
+            <input type="text">
+           </div>
+           <div>
+            <span>Item:</span> 
+            <input type="text">
+           </div>
+          </div>
+          <footer>
+           <input type="button" id="cmtx_numeric_modal_insert" class="cmtx_button cmtx_button_primary" value="Insert">
+           <input type="button" class="cmtx_button cmtx_button_secondary" value="Cancel">
+          </footer>
+         </div>
+         <div id="cmtx_link_modal" class="cmtx_modal_box" role="dialog">
+          <header>
+           <a href="#" class="cmtx_modal_close">x</a>
+           <div>
+            Insert Link
+           </div>
+          </header>
+          <div class="cmtx_modal_body">
+           <div>
+            Please enter the link of the website
+           </div>
+           <div>
+            <input type="url" placeholder="http://">
+           </div>
+           <div>
+            Optionally you can add display text
+           </div>
+           <div>
+            <input type="text">
+           </div>
+          </div>
+          <footer>
+           <input type="button" id="cmtx_link_modal_insert" class="cmtx_button cmtx_button_primary" value="Insert">
+           <input type="button" class="cmtx_button cmtx_button_secondary" value="Cancel">
+          </footer>
+         </div>
+         <div id="cmtx_image_modal" class="cmtx_modal_box" role="dialog">
+          <header>
+           <a href="#" class="cmtx_modal_close">x</a>
+           <div>
+            Insert Image
+           </div>
+          </header>
+          <div class="cmtx_modal_body">
+           <div>
+            Please enter the link of the image
+           </div>
+           <div>
+            <input type="url" placeholder="http://">
+           </div>
+          </div>
+          <footer>
+           <input type="button" id="cmtx_image_modal_insert" class="cmtx_button cmtx_button_primary" value="Insert">
+           <input type="button" class="cmtx_button cmtx_button_secondary" value="Cancel">
+          </footer>
+         </div>
+         <div id="cmtx_js_settings_form" style="display:none" hidden>
+          {"commentics_url":"\/\/quares.ru\/comments\/","page_id":4431,"enabled_country":false,"enabled_state":false,"state_id":0,"enabled_upload":false,"maximum_upload_amount":3,"maximum_upload_size":1,"maximum_upload_total":5,"securimage":false,"securimage_url":"\/\/quares.ru\/comments\/3rdparty\/securimage\/securimage_show.php?namespace=cmtx_4431","lang_error_file_num":"A maximum of %d files are allowed to be uploaded","lang_error_file_size":"Please upload files no bigger than %d MB in size","lang_error_file_total":"The total size of all files must be less than %d MB","lang_error_file_type":"Only image file types are allowed to be uploaded","lang_text_loading":"Loading ..","lang_placeholder_state":"State","lang_text_country_first":"Please select a country first","lang_button_submit":"\u0414\u043e\u0431\u0430\u0432\u0438\u0442\u044c","lang_button_preview":"\u041f\u0440\u043e\u0441\u043c\u043e\u0442\u0440","lang_button_remove":"Remove","lang_button_processing":"Please Wait.."}
+         </div>
+        </div>
+       </div>
+       <div id="cmtx_js_settings_page" style="display:none" hidden>
+        {"commentics_url":"\/\/quares.ru\/comments\/","auto_detect":false}
+       </div>
+      </div>
+     </div> 
+    </div> 
+   </div> 
+  </section> 
+  <footer id="footer" class="footer"> 
+   <div class="container"> 
+    <div class="row"> 
+     <div class="col-md-12"> 
+      <div class="credits"> <a href="/">Quares - вопросы, ответы, решения </a> 
+      </div> 
+     </div> 
+    </div> 
+   </div> 
+  </footer> 
+  <link rel="stylesheet" href="css/github.min.css"> 
+  <script src="//cdnjs.cloudflare.com/ajax/libs/highlight.js/9.13.1/highlight.min.js"></script> 
+  <script>hljs.initHighlightingOnLoad();</script>  
+ </body>
+</html>
